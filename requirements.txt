@@ -1,0 +1,10 @@
+django-debug-toolbar
+Django
+djangorestframework
+drf-spectacular
+psycopg2
+django-cors-headers
+django-filter
+python-dotenv
+django-multiselectfield
+django_nose
