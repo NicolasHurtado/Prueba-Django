@@ -18,6 +18,11 @@ python3 manage.py runserver
 
 python manage.py runserver
 
+## Correr test
+
+python manage.py test 
+
+
 ## Acceder a Endpoints de Información
 
 Tipos de PQR -> http://127.0.0.1:8000/api/pqrs/info_pqr_type
@@ -27,4 +32,10 @@ PQR -> http://127.0.0.1:8000/api/pqrs/info_pqr
 
 Se implementa Swagger la cual especifica la lista de recursos disponibles en la API REST y las operaciones a las que se puede llamar en estos recursos,
 permite probar los servicios de forma extremadamente sencilla  -> http://127.0.0.1:8000/api/schema/swagger-ui/
+
+## Correr con docker 
+
+docker build -t inlazz .
+
+docker run --name inlazz_app -p 8000:8000 -d inLazz
 

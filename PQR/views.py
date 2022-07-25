@@ -2,14 +2,13 @@ from urllib import response
 from django.shortcuts import render
 from rest_framework import views, status
 from rest_framework.response import Response
-from django.http import JsonResponse
 from .models import *
 from .serializers import *
-from django.utils import timezone
 
 
     
 class PQRType(views.APIView):
+    serializer_class = PQRTypeSerializer
 
     def get(self,request):
         PQRTys = PQRTypes.objects.all()
@@ -36,7 +35,7 @@ class DetailPQRType(views.APIView):
         except PQRTypes.DoesNotExist:
             PQRTy = None
         if PQRTy:
-            serializer = PQRTypeSerializer(PQRTy,many=True)
+            serializer = PQRTypeSerializer(PQRTy.get(),many=False)
         else:
             return Response({"res": f"El objeto con el id: {id} no existe"},status=status.HTTP_400_BAD_REQUEST)
             
@@ -44,8 +43,11 @@ class DetailPQRType(views.APIView):
     
     
     def put(self, request, id):
+        try:
+            PQRTy = PQRTypes.objects.get(id=id)
+        except PQRTypes.DoesNotExist:
+            PQRTy = None
         
-        PQRTy = PQRTypes.objects.get(id=id)
         if not PQRTy:
             return Response({"res": f"El objeto con el id: {id} no existe"},status=status.HTTP_400_BAD_REQUEST)
 
@@ -61,7 +63,11 @@ class DetailPQRType(views.APIView):
     
     def delete(self, request, id):
         
-        PQRTy = PQRTypes.objects.get(id=id)
+        try:
+            PQRTy = PQRTypes.objects.get(id=id)
+        except PQRTypes.DoesNotExist:
+            PQRTy = None
+
         if not PQRTy:
             return Response({"res": f"El objeto con el id: {id} no existe"},status=status.HTTP_400_BAD_REQUEST)
 
@@ -70,7 +76,7 @@ class DetailPQRType(views.APIView):
 
 
 class PQRS(views.APIView):
-
+    serializer_class = PQRSerializer
     def get(self,request):
         AllPQR = PQR.objects.all()
         serializer = PQRSerializer(AllPQR, many=True)
@@ -105,8 +111,9 @@ class DetailPQR(views.APIView):
             QueryPQR = PQR.objects.filter(id=id)
         except PQR.DoesNotExist:
             QueryPQR = None
+            
         if QueryPQR:
-            serializer = PQRSerializer(QueryPQR,many=True)
+            serializer = PQRSerializer(QueryPQR.get(),many=False)
         else:
             return Response({"res": f"El objeto con el id: {id} no existe"},status=status.HTTP_400_BAD_REQUEST)
             
@@ -114,8 +121,11 @@ class DetailPQR(views.APIView):
     
     
     def put(self, request, id):
+        try:
+            QueryPQR = PQR.objects.get(id=id)
+        except PQR.DoesNotExist:
+            QueryPQR = None
         
-        QueryPQR = PQR.objects.get(id=id)
         if not QueryPQR:
             return Response({"res": f"El objeto con el id: {id} no existe"},status=status.HTTP_400_BAD_REQUEST)
 
@@ -142,12 +152,16 @@ class DetailPQR(views.APIView):
     
     def delete(self, request, id):
         
-        QueryPQR = PQR.objects.get(id=id)
+        try:
+            QueryPQR = PQR.objects.get(id=id)
+        except PQR.DoesNotExist:
+            QueryPQR = None
+        
         if not QueryPQR:
             return Response({"res": f"El objeto con el id: {id} no existe"},status=status.HTTP_400_BAD_REQUEST)
 
         QueryPQR.delete()
-        return Response({"res": f"Tipo de PQR con id: {id} ha sido elimiinado!"}, status=status.HTTP_200_OK)
+        return Response({"res": f"Tipo de PQR con id: {id} ha sido eliminado!"}, status=status.HTTP_200_OK)
 
 class DeletePQRS(views.APIView):
     def delete(self, request):
